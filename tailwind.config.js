@@ -7,6 +7,7 @@ module.exports = {
       colors: {
         "primary-color": "var(--primary-color-light)",
         "secondary-color": "var(--secondary-color-light)",
+        "bg-color-dark": "var(--bg-clr-dark)",
       },
     },
   },
