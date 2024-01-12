@@ -27,7 +27,7 @@ const Home = () => {
 
   return (
     <div className="bg-white dark:bg-bg-color-dark">
-      <div className="min-h-[100vh]">
+      <div className="min-h-[100vh] relative">
         <div className="px-4 py-3 flex items-center justify-between shadow-md ">
           <div className="flex items-center gap-2">
             <div className="w-[32px] h-[32px] rounded-full overflow-hidden">
@@ -48,7 +48,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center sticky top-0">
           <AddToDo />
         </div>
       </div>
