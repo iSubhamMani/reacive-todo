@@ -3,6 +3,7 @@ import dark from "../assets/dark.png";
 import light from "../assets/light.png";
 import { useEffect, useState } from "react";
 import AddToDo from "./AddToDo";
+import AddToDoModal from "./AddToDoModal";
 
 const Home = () => {
   const [theme, setTheme] = useState("light");
@@ -51,6 +52,7 @@ const Home = () => {
         <div className="flex justify-center sticky top-0">
           <AddToDo />
         </div>
+        <AddToDoModal />
       </div>
     </div>
   );
