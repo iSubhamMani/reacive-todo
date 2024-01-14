@@ -1,14 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import closeBtn from "../assets/close.png";
 import { setShowModal } from "../utils/slices/appSlice";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../utils/fireStore";
 
 const AddToDoModal = () => {
   const dispatch = useDispatch();
   const { showModal } = useSelector((store) => store.app);
+  const user = useSelector((store) => store.user);
 
-  const handleForm = () => {
-    console.log("Form submitted");
+  const [title, setTitle] = useState(null);
+  const [dueDate, setDueDate] = useState(
+    new Date().toLocaleDateString("fr-ca")
+  );
+
+  const handleForm = async () => {
+    if (!title) return;
+
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("uid", "==", user?.userInfo?.uid));
+    const querySnapshot = await getDocs(q);
+
+    const currentUser = querySnapshot.docs[0].id;
+
+    try {
+      const doc = await addDoc(collection(db, `users/${currentUser}/toDos`), {
+        title: title,
+        dueDate: dueDate,
+      });
+
+      if (doc) dispatch(setShowModal(false));
+    } catch (error) {
+      console.log("Error adding document");
+    }
   };
 
   const closeModal = () => {
@@ -41,6 +66,7 @@ const AddToDoModal = () => {
               type="text"
               id="title"
               required
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g: watch a movie"
               className="w-full px-4 py-2 border-2 border-gray-200 active:outline-black focus:outline-black rounded-lg"
             />
@@ -53,6 +79,7 @@ const AddToDoModal = () => {
               id="due-date"
               type="date"
               required
+              onChange={(e) => setDueDate(e.target.value)}
               defaultValue={new Date().toLocaleDateString("fr-ca")}
               min={new Date().toLocaleDateString("fr-ca")}
               className="w-full rounded-lg px-4 py-2 border-2 border-gray-200 active:outline-black focus:outline-black"

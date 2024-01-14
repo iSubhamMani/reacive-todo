@@ -1,15 +1,25 @@
+import { addDoc, collection } from "firebase/firestore";
 import { GOOGLE_ICON } from "../utils/constants";
 import { auth } from "../utils/firebase";
 import Footer from "./Footer";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { db } from "../utils/fireStore";
 
 const Login = () => {
   const handleUserLogin = () => {
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
+
+        const userRef = await addDoc(collection(db, "users"), {
+          name: user.displayName,
+          email: user.email,
+          uid: user.uid,
+        });
+
+        if (userRef) console.log("Logged In succesfully!");
       })
       .catch((error) => {
         // Handle Errors here.
